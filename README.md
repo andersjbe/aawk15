@@ -4,8 +4,12 @@
   - [Redux](#redux)
     - [Flux & Redux](#flux--redux)
     - [Redux Store](#redux-store)
+      - [Preloaded State](#preloaded-state)
     - [Reducers](#reducers)
+      - [Splitting & Combining Reducers](#splitting--combining-reducers)
     - [Actions](#actions)
+    - [React + Redux](#react--redux)
+      - [Container Components](#container-components)
 
 ## Redux
 
@@ -45,7 +49,7 @@
 - `createStore(reducer, [preloadedState], [enhancer])`
   - Reducer - required - a function that takes in the store's current state and incoming action, and then applies the action to the store's current state
   - preloadedState - object representing the application's state before the store
-  - enhancer -  a callback that can provide additional functionaility
+  - enhancer - a callback that can provide additional functionaility
 - Typically one application has one store
 - Methods
   - getState - returns the store's current state
@@ -53,6 +57,12 @@
   - subscribe(event) - Sets a callback to be triggered whenever the store is updated.
     - Returns a function that can unsubsribe the callback function from the store
 - Actions store new information in payload keys
+
+#### Preloaded State
+
+- Instead of initializing store to be an empty object every time the page loads, you can pass in a preloaded state to the createStore method.
+- You can use this to load data from local storage to create persistent state from reload to reload
+- To save data, save the ddata in subscribe's callback
 
 ### Reducers
 
@@ -63,6 +73,16 @@
   - To be extra sure, you can call Object.freeze()
   - To clone an object, use `{ ..obj }` or `Object.assign({}, obj)`
 
+#### Splitting & Combining Reducers
+
+- aka Reducer Composition
+- Multiple reducers can be used to manage different slices of state
+- But only one reducer can be used by createStore
+- Reducers will have to be combined to a root reducer
+- combineReducers is a method on Redux that takes in an object which maps keys to each reducer to be combined
+- getState calls may have to be corrected
+- You can split a reducer so that it delegates to another reducer
+
 ### Actions
 
 - The "setters" of Store
@@ -72,3 +92,26 @@
 - Action cretors
   - Functions that return action objects
   - Usually take in arguments for payload data but havea creator for each action type
+
+### React + Redux
+
+- Usually triggered by an event handler that calls dispatch with an action
+- Actions, reducers, and the store should be separated into their own folders/files
+- Action creators can be attached as properties of the window
+- To use rdux in a react comonent, just import the store
+- When using a redux state with a react component, store should subscribe to forceUpdate() when it is mounted. This ensures that the react component will update whenever the state is updated
+  - To clean up, save the subscribe's return as a property of the component and call it when the lement unmounts
+
+#### Container Components
+
+- Hold information vs. present information
+
+|                | Presentational              | Container                 |
+| -------------- | --------------------------- | ------------------------- |
+| Purpose        | How things Look             | How things work           |
+| Aware of Redux | No                          | Yes                       |
+| To Read Data   | Use props                   | Redux state subscriptions |
+| To change data | Invoke callbacks from props | Dispatch Redux actions    |
+
+- Container components wrap presentational components, and sends it relevant data using props
+- Containers should wrap large elements, there should only be a few container components
