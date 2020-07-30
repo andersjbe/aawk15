@@ -8,8 +8,11 @@
     - [Reducers](#reducers)
       - [Splitting & Combining Reducers](#splitting--combining-reducers)
     - [Actions](#actions)
+      - [Thunks](#thunks)
     - [React + Redux](#react--redux)
       - [Container Components](#container-components)
+      - [React-Redux & Connect](#react-redux--connect)
+    - [Auth with Redux](#auth-with-redux)
 
 ## Redux
 
@@ -93,6 +96,12 @@
   - Functions that return action objects
   - Usually take in arguments for payload data but havea creator for each action type
 
+#### Thunks
+
+- Actions must be objects, must be synchronous
+- Thunks are functions that take in dispatch and getState
+- Once a thunk gets the data that it needs, it uses the dispatch to send a regular action object to the store
+
 ### React + Redux
 
 - Usually triggered by an event handler that calls dispatch with an action
@@ -115,3 +124,35 @@
 
 - Container components wrap presentational components, and sends it relevant data using props
 - Containers should wrap large elements, there should only be a few container components
+
+#### React-Redux & Connect
+
+- Takes care of a lot of the boilerplate code needed when connecting a component to Redux
+- Because much of the boilerplate is gone, most components can be written as functions
+- R-R provides a provider component which has a store property that connects its child components to the redux store
+  - R-R will automatically create consumers where necessary
+- R-R's connect function is a closure, it returns a function which can be used to create a connected component
+  - Connect allow components to only connect to relevant parts of the store, avoiding unnecessary reloading
+  - The returned function takes in a component to be connected
+- connect can take up to 3 args
+  - mapSTateToArgs
+    - Takes in state
+    - Returns an object that maps values in the state to a prop key
+  - mapDispatchToProps
+    - Accepts dispatch as an argument
+    - Returns a function that holds functions that define how the connected component interacts with the store
+    - It's how controlled components are implemented in react-redux
+    - Every function will be sotred in props
+
+### Auth with Redux
+
+- Server/Client Auth Communication
+  1. Initial Req - Responds with redux/react code
+  2. User authenitcation
+  - If there is a JWT, then returns user data
+  - If there is no JWT, present the option to sign in /sign up
+  3. Once we have a JWT, we can attach the user information to the redux/react state
+- Redux will manage
+  - The JWT
+  - Current User data
+  - Persist the current user across sessions
