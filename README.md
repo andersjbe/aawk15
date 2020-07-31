@@ -13,6 +13,9 @@
       - [Container Components](#container-components)
       - [React-Redux & Connect](#react-redux--connect)
     - [Auth with Redux](#auth-with-redux)
+  - [React Hooks](#react-hooks)
+    - [React Router Hooks](#react-router-hooks)
+    - [hooks with Redux](#hooks-with-redux)
 
 ## Redux
 
@@ -156,3 +159,47 @@
   - The JWT
   - Current User data
   - Persist the current user across sessions
+
+## React Hooks
+
+- Functions that let functional companents use some parts of class components like state
+- Basic hooks include useSTate, useEffect, and useContext
+- useState
+  - `const [inputVal, setInputVal] = useState('Default Input Value here`
+  - Defines a getter, setter and default value
+- useEffect
+  - `useEffect(() => {}, [dependencies])`
+  - Side effect operations like data fetching
+  - SPecifies dependencies to skip effects
+  - To use async functions, must use an internal async function
+  - The cb will run evety time any of dependent components are updated
+  - WIth an empty dependency list, the cb will only run when the component is mounted
+  - A function returned by useEffect will be called whenthe comonent unmounts
+
+### React Router Hooks
+
+- useParams
+  - Returns an object containing the params from the current route
+- useHistory
+  - Returns a react router history object
+  - Replace and push can take in a second argument, an object that will be added under history .location.state
+- useLocation
+  - Retuns a location object
+- useRouteMatch
+  -  
+
+
+| Before Hooks                   | After Hooks            |
+| ------------------------------ | ---------------------- |
+| this.state                     | useState               |
+| class wuth render              | function with return   |
+| methods                        | Functions in functions |
+| Fetching in a lifecycle method | Fetching in useEffect  |
+
+### hooks with Redux
+
+- useSelector takes in a callback that accepts the state as an argument, from there you can return any part of the state you need
+  - replaces mapstatetoprops
+- useDispatch returns a function that accepts an action type as an argument which can be used to send dispatches to the store
+  - Replaces mapdispatchtoprops
+- No need for connect
